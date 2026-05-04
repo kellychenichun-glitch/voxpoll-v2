@@ -14,7 +14,7 @@ export default function VoiceConversationEngine({ modeId, onComplete }) {
   const [currentText, setCurrentText] = useState('');
   const [responses, setResponses] = useState([]);
   const [transcript, setTranscript] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState('')
   const recognitionRef = useRef(null);
   const silenceTimerRef = useRef(null);
   const transcriptRef = useRef('');
@@ -51,7 +51,7 @@ export default function VoiceConversationEngine({ modeId, onComplete }) {
         setPhase('done');
         speakText('感謝您完成本次訪談！');
         setTimeout(() => onComplete && onComplete(newResp), 3000);
-      } else {
+    
         setCurrentQuestion(nextQ);
         speakText(data.aiResponse);
       }
@@ -92,7 +92,7 @@ export default function VoiceConversationEngine({ modeId, onComplete }) {
         return q;
       });
     };
-    r.onerror = (e) => { if (e.error === 'no-speech') submitResponse('[未偵測到語音]', 0, currentText, responses); else setError('錯誤: ' + e.error); };
+      r.onerror = (e) => { if (e.error === 'no-speech') submitResponse('[未偵測到語音]', 0, currentText, responses); else if (e.error === 'aborted') {} else setError('語音辨識錯誤: ' + e.error); };
     r.start();
   }, [submitResponse, currentText, responses]);
 
